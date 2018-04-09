@@ -13,7 +13,6 @@ Imports MM.FHEMManager.FHEMTemplates
     Public Shared ReadOnly cAttributeListSplitChar() As Char = {","}
 
     Public ReadOnly Property SerializationErrors As New Collection(Of String)
-    Public ReadOnly Property TemplateValidationErrors As New Collection(Of String)
 
     Friend Function AllGroups() As SortedList(Of String, String)
         Dim myReturn As New SortedList(Of String, String)

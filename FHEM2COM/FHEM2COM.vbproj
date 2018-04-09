@@ -111,6 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="cdFHEM2COM.cd" />
     <None Include="FHEM2COM.ruleset" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>

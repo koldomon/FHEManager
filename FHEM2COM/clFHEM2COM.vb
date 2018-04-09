@@ -43,24 +43,42 @@ Imports MM.FHEMManager.FHEMTemplates
     End Sub
 
 
+    ''' <summary>
+    ''' Load the default FHEM config named in the app.config
+    ''' </summary>
     <ComVisible(True)> Public Function LoadCfg() As Boolean
         Return glbKernel.LoadCfg()
     End Function
+    ''' <summary>
+    ''' Load the FHEM config from the supplied filename
+    ''' </summary>
     <ComVisible(True)> Public Function LoadCfg(thisConfigFilename As String) As Boolean
         If String.IsNullOrEmpty(thisConfigFilename) Then Return False
         Return glbKernel.LoadCfg(thisConfigFilename)
     End Function
+    ''' <summary>
+    ''' Load the default Templatefile named in the app.config
+    ''' </summary>
     <ComVisible(True)> Public Function LoadTemplate() As Boolean
         Return glbKernel.LoadTemplates()
     End Function
+    ''' <summary>
+    ''' Load the Templates from the supplied filename
+    ''' </summary>
     <ComVisible(True)> Public Function LoadTemplates(thisTemplateFilename As String) As Boolean
         If String.IsNullOrEmpty(thisTemplateFilename) Then Return False
         Return glbKernel.LoadTemplates(thisTemplateFilename)
     End Function
+    ''' <summary>
+    ''' Get the Events after reading the Template. Offers all errors from the XMLSerializer
+    ''' </summary>
     <ComVisible(True)> Public Function GetSerializationEvents() As String()
         Return glbKernel.SerializationErrors.ToArray
     End Function
 
+    ''' <summary>
+    ''' Returns the FHEM Devices in the loaded config
+    ''' </summary>
     <ComVisible(True)> Public Function ObjectCount() As Integer
         Return glbKernel.GetObjectsCount
     End Function
@@ -68,11 +86,17 @@ End Class
 
 #Region "ObjectOperations"
 Partial Class FHEMCOM
+    ''' <summary>
+    ''' Get all used TYPE
+    ''' </summary>
     <ComVisible(True)> Public Function GetTypes() As String()
         Dim myReturn As New List(Of String)
         myReturn.AddRange(glbKernel.CurrentObjects.Select(Of String)(Function(x) x.FHEMType).Distinct)
         Return myReturn.OrderBy(Function(x) x).ToArray
     End Function
+    ''' <summary>
+    ''' Get all Attributes used by the FHEM Devices of this TYPE
+    ''' </summary>
     <ComVisible(True)> Public Function GetTypeAttributes(thisTypeName As String) As String()
         Dim myReturn As New List(Of String)
 
@@ -86,20 +110,32 @@ Partial Class FHEMCOM
         Return myReturn.OrderBy(Function(x) x).ToArray
     End Function
 
+    ''' <summary>
+    ''' Get's all FHEM Devices by a named FHEM Type
+    ''' </summary>
     <ComVisible(True)> Public Function GetObjectsByType(thisTypeName As String) As FHEMObj()
         Dim myReturn As New List(Of FHEMObj)
         myReturn.AddRange(glbKernel.CurrentObjects.Where(Function(x) x.FHEMType.Equals(thisTypeName)))
         Return myReturn.OrderBy(Function(x) x.Name).ToArray
     End Function
+    ''' <summary>
+    ''' Find a FHEM Device by a part of it's name
+    ''' </summary>
     <ComVisible(True)> Public Function FindObjectsByName(thisSearchString As String) As FHEMObj()
         Dim myReturn As New List(Of FHEMObj)
         myReturn.AddRange(glbKernel.CurrentObjects.Where(Function(x) x.Name.Contains(thisSearchString)))
         Return myReturn.OrderBy(Function(x) x.Name).ToArray
     End Function
+    ''' <summary>
+    ''' Get's a FHEM Device by it's exact name
+    ''' </summary>
     <ComVisible(True)> Public Function GetObjByName(thisName As String) As FHEMObj
         Return glbKernel.CurrentObjects.FirstOrDefault(Function(x) x.Name.Equals(thisName, StringComparison.CurrentCultureIgnoreCase))
     End Function
 
+    ''' <summary>
+    ''' Get all attribute names as an String-Array
+    ''' </summary>
     <ComVisible(True)> Public Function GetObjAttributes(thisObjName As String) As String()
         Dim myObj As FHEMObj = glbKernel.CurrentObjects.FirstOrDefault(Function(x) x.Name.Equals(thisObjName))
         If myObj IsNot Nothing Then
@@ -107,6 +143,9 @@ Partial Class FHEMCOM
         End If
         Return Nothing
     End Function
+    ''' <summary>
+    ''' Gets the values of an attribute as an String-Array
+    ''' </summary>
     <ComVisible(True)> Public Function GetObjAttribute(thisObjName As String, thisAttributeName As String) As String()
         Dim myObj As FHEMObj = glbKernel.CurrentObjects.FirstOrDefault(Function(x) x.Name.Equals(thisObjName))
         If myObj IsNot Nothing AndAlso myObj.Attributes.ContainsKey(thisAttributeName) Then
@@ -115,6 +154,9 @@ Partial Class FHEMCOM
         Return Nothing
     End Function
 
+    ''' <summary>
+    ''' Get all rooms from the FHEM Device (shortcut to attribute 'room')
+    ''' </summary>
     <ComVisible(True)> Public Function GetObjRooms(thisObjName As String) As String()
         Dim myObj As FHEMObj = glbKernel.CurrentObjects.FirstOrDefault(Function(x) x.Name.Equals(thisObjName))
         If myObj IsNot Nothing Then
@@ -122,6 +164,9 @@ Partial Class FHEMCOM
         End If
         Return Nothing
     End Function
+    ''' <summary>
+    ''' Get all groups from the FHEM Device (shortcut to attribute 'group')
+    ''' </summary>
     <ComVisible(True)> Public Function GetObjGroups(thisObjName As String) As String()
         Dim myObj As FHEMObj = glbKernel.CurrentObjects.FirstOrDefault(Function(x) x.Name.Equals(thisObjName))
         If myObj IsNot Nothing Then
@@ -134,34 +179,64 @@ End Class
 
 #Region "TemplateOperations"
 Partial Class FHEMCOM
+    ''' <summary>
+    ''' Get all Template names
+    ''' </summary>
     <ComVisible(True)> Public Function GetTemplateNames() As String()
         Return glbKernel.GetTemplateNames.OrderBy(Function(x) x).ToArray
     End Function
+    ''' <summary>
+    ''' Returns the Templates contained in the loaded TemplateFile
+    ''' </summary>
     <ComVisible(True)> Public Function TemplateCount() As Integer
         Return glbKernel.GetTemplatesCount
     End Function
+    ''' <summary>
+    ''' Get a Template by it's name
+    ''' </summary>
     <ComVisible(True)> Public Function GetTemplate(thisTemplateName As String) As FHEMTemplate
         Return glbKernel.GetTemplate(thisTemplateName)
     End Function
+    ''' <summary>
+    ''' Get all ObjectFilter names from a Template
+    ''' </summary>
     <ComVisible(True)> Public Function GetTemplateFilterNames(thisTemplateName As String) As String()
         Return glbKernel.GetTemplateFilterNames(thisTemplateName).ToArray
     End Function
+    ''' <summary>
+    ''' Gets a named ObjectFilter from a named Template
+    ''' </summary>
     <ComVisible(True)> Public Function GetTemplateFilter(thisTemplateName As String, thisFilterName As String) As ObjectFilter
         Return glbKernel.GetTemplateFilter(thisTemplateName, thisFilterName)
     End Function
+    ''' <summary>
+    ''' Get all ObjectTemplates that matches the named Template and the named ObjectFilter
+    ''' </summary>
     <ComVisible(True)> Public Function GetObjectTemplates(thisTemplateName As String, thisFilterName As String) As ObjectTemplate()
         Return glbKernel.GetObjectTemplates(thisTemplateName, thisFilterName).ToArray
     End Function
+    ''' <summary>
+    ''' Get the ObjectTemplate in the named Template that matches the named ObjectFilter and the named FHEM Type
+    ''' </summary>
     <ComVisible(True)> Public Function GetObjectTemplate(thisTemplateName As String, thisFilterName As String, thisFHEMType As String) As ObjectTemplate
         Return glbKernel.GetObjectTemplate(thisTemplateName, thisFilterName, thisFHEMType)
     End Function
+    ''' <summary>
+    ''' Get's all FHEM Devices that matches the named ObjectFilter in the named Template
+    ''' </summary>
     <ComVisible(True)> Public Function GetObjectsByObjectFilter(thisTemplateName As String, thisFilterName As String) As FHEMObj()
         Return glbKernel.GetObjectsByFilter(thisTemplateName, thisFilterName).ToArray
     End Function
+    ''' <summary>
+    ''' Get's all FHEM Devices that match the supplied ObjectFilter
+    ''' </summary>
     <ComVisible(True)> Public Function GetObjectsByObjectFilter(thisFilter As ObjectFilter) As FHEMObj()
         Return glbKernel.GetObjectsByFilter(thisFilter).ToArray
     End Function
-    <ComVisible(True)> Public Function GetTemplateCreatedObjects(thisTemplate, thisObjectFilter, thisObjectTemplate, thisFHEMObj) As FHEMObj()
+    ''' <summary>
+    ''' Gets all Objects that where created by the supplied Template, ObjectFilter, ObjectTemplate and FHEM Device
+    ''' </summary>
+    <ComVisible(True)> Public Function GetTemplateCreatedObjects(thisTemplate As FHEMTemplate, thisObjectFilter As ObjectFilter, thisObjectTemplate As ObjectTemplate, thisFHEMObj As FHEMObj) As FHEMObj()
         Return FHEMKernel.TemplateCreateObjects(thisTemplate, thisObjectFilter, thisObjectTemplate, thisFHEMObj).ToArray
     End Function
 
@@ -170,6 +245,9 @@ End Class
 
 #Region "ObjectStringOperations"
 Partial Class FHEMCOM
+    ''' <summary>
+    ''' Extracts FHEM Devices from an DOIF. Works with a regular expression
+    ''' </summary>
     <ComVisible(True)> Public Function GetDoIfCheckItems(thisDefinition As String) As String()
         Dim myReturn As New List(Of String)
         Dim myRegExString As String = "((?:\(){1}(?:\[){1}(?<timespan>\+[^\)]*)(?:\]){1}(?:\)){1})|((?:\[){1}(?<device>[^\[\]]*)(?:\]){1})"
@@ -184,6 +262,9 @@ Partial Class FHEMCOM
         End If
         Return myReturn.Distinct.ToArray
     End Function
+    ''' <summary>
+    ''' Extracts the triggered FHEM Device from a DOIF
+    ''' </summary>
     <ComVisible(True)> Public Function GetDoIfTrigger(thisDefinition As String) As String
         Dim myReturn As String = String.Empty
         Dim myRegExString As String = "(?<trigger>(?<=trigger )[^ ]*)"
@@ -196,6 +277,9 @@ Partial Class FHEMCOM
         Return myReturn
     End Function
 
+    ''' <summary>
+    ''' Extracts the trigger from a NOTIFY. Works with a regular expression
+    ''' </summary>
     <ComVisible(True)> Public Function GetNotifyTrigger(thisDefinition As String) As String
         Dim myReturn As String = String.Empty
         Dim myRegExString As String = "(?<trigger>^[^\{ ]*(?= \{))"
@@ -207,6 +291,9 @@ Partial Class FHEMCOM
         End If
         Return myReturn
     End Function
+    ''' <summary>
+    ''' Extracts the actors from a NOTIFY. Works with a regular expression
+    ''' </summary>
     <ComVisible(True)> Public Function GetNotifyActorItems(thisDefinition As String) As String()
         Dim myReturn As New List(Of String)
 
@@ -221,6 +308,9 @@ Partial Class FHEMCOM
         End If
         Return myReturn.Distinct.ToArray
     End Function
+    ''' <summary>
+    ''' Extracts the checks from a NOTIFY. Works with a regular expression
+    ''' </summary>
     <ComVisible(True)> Public Function GetNotifyCheckItems(thisDefinition As String) As String()
         Dim myReturn As New List(Of String)
 

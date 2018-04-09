@@ -1,5 +1,8 @@
 ﻿Module modMain
     Friend glbKernel As FHEMManager.FHEMKernel
+    ''' <summary>
+    ''' Main Routine for the CommandLine interface
+    ''' </summary>
     Sub Main()
         glbKernel = New FHEMManager.FHEMKernel
 
@@ -18,6 +21,17 @@
 
     End Sub
 
+    ''' <summary>
+    ''' commandline
+    ''' </summary>
+    ''' <remarks>
+    ''' load [filename] Load the default config. Supply a filename to load
+    ''' save [path filename|pathandfilename] Save the loaded config
+    ''' backuplog "logname" Archive old LogEntries from the logname (without extension, no .log nessecary)
+    ''' backuplogs Archive all .log Files in the Log Directory
+    ''' packoldfiles Packs the paranoia-safty-backups of LogFiles to zip by year_month
+    ''' stop|exit What you expect
+    ''' </remarks>
     <CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")>
     Private Sub ManualMode()
         Console.WriteLine("Please give me commands!")
@@ -31,6 +45,7 @@
             'Dim myInputs As List(Of String) = myInput.Split(FHEMManager.FHEMKernel.cWordSplitChar, StringSplitOptions.RemoveEmptyEntries).ToList
             Select Case myInputs(0).ToLower
                 Case "command", "commands", "cmds"
+                    'TODO: Implement commandline help
                 Case "load", "loadcfg"
                     If myInputs.Count = 2 Then
                         myReturn = glbKernel.LoadCfg(myInputs(1))

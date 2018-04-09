@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="MM.FHEMManager.FHEMKernel">
+    <Position X="0.5" Y="0.5" Width="2.75" />
+    <NestedTypes>
+      <Enum Name="MM.FHEMManager.FHEMKernel.SaveStyle" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>clKernel_Configuration.vb</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="MM.FHEMManager.FHEMKernel.TemplateUpdateCommandCreationFlags" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>clKernel_Template.vb</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Class Name="MM.FHEMManager.FHEMKernel.InspectResult" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>clKernel_Template.vb</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AcWgiARB0sGUECCY4EGABRAA0AZBKYIAIWJSCKAKCEg=</HashCode>
+      <FileName>clKernel.vb</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
