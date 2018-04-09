@@ -286,3 +286,13 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+
+#My TestFiles
+TestFiles/*.cfg
+TestFiles/*/*.cfg
+TestFiles/*.xml
+TestFiles/*/*.xml
+TestFiles/*.log
+TestFiles/*/*.log
+TestFiles/*.old
+TestFiles/*/*.old

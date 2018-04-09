@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="FHEMTemplateManager" type="FHEMTemplateManager" />
+  <xs:complexType name="FHEMTemplateManager">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Templates" type="ArrayOfTemplate" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfTemplate">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Template" nillable="true" type="Template" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Template">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Filters" type="ArrayOfObjectFilter" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ObjectTemplates" type="ArrayOfFHEMObjectTemplate" />
+    </xs:sequence>
+    <xs:attribute name="ID" type="xs:int" use="required" />
+    <xs:attribute name="Name" type="xs:string" />
+  </xs:complexType>
+  <xs:complexType name="ArrayOfObjectFilter">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Filter" nillable="true" type="ObjectFilter" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ObjectFilter">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Type" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Name" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Attributes" type="ArrayOfKeyValueObject" />
+    </xs:sequence>
+    <xs:attribute name="Name" type="xs:string" />
+  </xs:complexType>
+  <xs:complexType name="ArrayOfKeyValueObject">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="KeyValueObject" nillable="true" type="KeyValueObject" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="KeyValueObject">
+    <xs:complexContent mixed="false">
+      <xs:extension base="StringReplaceObjectBase">
+        <xs:sequence>
+          <xs:choice minOccurs="1" maxOccurs="1">
+            <xs:element minOccurs="0" maxOccurs="1" name="StringObject" type="StringObject" />
+            <xs:element minOccurs="0" maxOccurs="1" name="StringFormatObject" type="StringFormatObject" />
+            <xs:element minOccurs="0" maxOccurs="1" name="KeyValueObject" type="KeyValueObject" />
+            <xs:element minOccurs="0" maxOccurs="1" name="ReferenceObject" type="ReferenceObject" />
+          </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="Key" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="StringReplaceObjectBase" abstract="true">
+    <xs:complexContent mixed="false">
+      <xs:extension base="TemplateBase" />
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TemplateBase" abstract="true" />
+  <xs:complexType name="FHEMObjectTemplate">
+    <xs:complexContent mixed="false">
+      <xs:extension base="TemplateBase">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="Filters" type="ArrayOfString" />
+          <xs:choice minOccurs="1" maxOccurs="1">
+            <xs:element minOccurs="0" maxOccurs="1" name="Name" type="StringFormatObject" />
+            <xs:element minOccurs="0" maxOccurs="1" name="SimpleName" type="StringObject" />
+          </xs:choice>
+          <xs:choice minOccurs="1" maxOccurs="1">
+            <xs:element minOccurs="0" maxOccurs="1" name="Definition" type="StringFormatObject" />
+            <xs:element minOccurs="0" maxOccurs="1" name="SimpleDefinition" type="StringObject" />
+          </xs:choice>
+          <xs:element minOccurs="0" maxOccurs="1" name="Attributes" type="ArrayOfKeyValueObject" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ObjectTemplates" type="ArrayOfFHEMObjectTemplate" />
+        </xs:sequence>
+        <xs:attribute name="FHEMType" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfString">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Filter" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="StringFormatObject">
+    <xs:complexContent mixed="false">
+      <xs:extension base="StringReplaceObjectBase">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="FormatString" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Values" type="ArrayOfKeyValueObject" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="StringObject">
+    <xs:complexContent mixed="false">
+      <xs:extension base="StringReplaceObjectBase">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="Value" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfFHEMObjectTemplate">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="FHEMObject" nillable="true" type="FHEMObjectTemplate" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ReferenceObject">
+    <xs:complexContent mixed="false">
+      <xs:extension base="StringReplaceObjectBase">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="ObjectSpecifier" type="ObjectSpecifier" />
+          <xs:choice minOccurs="1" maxOccurs="1">
+            <xs:element minOccurs="0" maxOccurs="1" name="StringObject" type="StringObject" />
+            <xs:element minOccurs="0" maxOccurs="1" name="KeyValueObject" type="KeyValueObject" />
+            <xs:element minOccurs="0" maxOccurs="1" name="ReferenceObject" type="ReferenceObject" />
+          </xs:choice>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="ObjectSpecifier">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Template" />
+      <xs:enumeration value="TemplateFHEMObj" />
+      <xs:enumeration value="CurrentObjectTemplate" />
+      <xs:enumeration value="CurrentFHEMObj" />
+      <xs:enumeration value="ParentObjectTemplate" />
+      <xs:enumeration value="ParentFHEMObj" />
+      <xs:enumeration value="ParentObject" />
+      <xs:enumeration value="Other" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

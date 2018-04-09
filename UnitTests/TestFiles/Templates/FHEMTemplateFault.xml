@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<FHEMTemplateManager>
+  <Templates>
+    <Template ID="1001" Name="Heizung">
+      <Filters>
+        <Filter Name="Enocean_Filter">
+          <Type>EnOcean</Type>
+          <Attributes>
+            <KeyValueObject Kez="eep"><Value>A5-20-01</Value></KeyValueObject>
+          </Attributes>
+        </Filter>
+      </Filters>
+      <ObjectTemplates>
+        <FHEMObject Type="DoIf" FilterName="Enocean_Filter">
+          <Name>
+            <FormatString>{0}_{1}_Timer</FormatString>
+            <Values>
+              <KeyValueObject Key="{0}">
+                <ReferenceObject>
+                  <ObjectSpecifier>TemplateFHEMObj</ObjectSpecifier>
+                  <KeyValueObject Key="Attributes">
+                    <KeyValueObject Key="room">
+                      <Values>1</Values>
+                    </KeyValueObject>
+                  </KeyValueObject>
+                </ReferenceObject>
+              </KeyValueObject>
+              <KeyValueObject Key="{1}">
+                <ReferenceObject>
+                  <ObjectSpecifier>Template</ObjectSpecifier>
+                  <Property>Name</Property>
+                </ReferenceObject>
+              </KeyValueObject>
+            </Values>
+          </Name>
+          <Definition>
+            <FormatString>((([$CHECK0] eq "on") or ([$CHECK1] eq "on") or ([$CHECK2] eq "on")) and ([$CHECK3])) (trigger $TRIGGER desired [$CHECK4]) \
+              DOELSEIF ((([$CHECK0] eq "on") or ([$CHECK1] eq "on") or ([$CHECK2] eq "on")) and ([$CHECK5])) (trigger $TRIGGER desired [$CHECK6]) \
+              DOELSEIF (([$CHECK0] eq "off") and ([$CHECK1] eq "off") and ([$CHECK2] eq "off") and ([$CHECK7])) (trigger $TRIGGER desired [$CHECK4]) \
+              DOELSEIF (([$CHECK0] eq "off") and ([$CHECK1] eq "off") and ([$CHECK2] eq "off") and ([$CHECK5])) (trigger $TRIGGER desired [$CHECK6]) \
+              DOELSEIF ((([$CHECK0] eq "on") or ([$CHECK1] eq "on") or ([$CHECK2] eq "on")) and ([$CHECK3-$CHECK5]) and ([$CHECK4])) (trigger $TRIGGER desired [$CHECK4]) \
+              DOELSEIF (([$CHECK0] eq "off") and ([$CHECK1] eq "off") and ([$CHECK2] eq "off") and ([$CHECK5-$CHECK7]) and ([$CHECK6])) (trigger $TRIGGER desired [$CHECK6])</FormatString>
+            <Values>
+              <KeyValueObject Key="$TRIGGER">
+                <!--02_OG_Arbeit_Heizung_Notify-->
+                <StringFormatObject>
+                  <FormatString>{0}_{1}_Notify</FormatString>
+                  <Values>
+                    <KeyValueObject Key="{0}">
+                      <ReferenceObject>
+                        <ObjectSpecifier>TemplateFHEMObj</ObjectSpecifier>
+                        <KeyValueObject Key="Attributes">
+                          <KeyValueObject Key="room">
+                            <Value>1</Value>
+                          </KeyValueObject>
+                        </KeyValueObject>
+                      </ReferenceObject>
+                    </KeyValueObject>
+                    <KeyValueObject Key="{1}">
+                      <ReferenceObject>
+                        <ObjectSpecifier>Template</ObjectSpecifier>
+                        <Property>Name</Property>
+                      </ReferenceObject>
+                    </KeyValueObject>
+                  </Values>
+                </StringFormatObject>
+              </KeyValueObject>
+              <KeyValueObject Key="$CHECK0"><Value>isWeekend</Value></KeyValueObject>
+              <KeyValueObject Key="$CHECK1"><Value>isFeiertag</Value></KeyValueObject>
+              <KeyValueObject Key="$CHECK2"><Value>isHoliday</Value></KeyValueObject>
+              <KeyValueObject Key="$CHECK3"><Value>{ReadingsVal("02_OG_Weekend_Start", "state", sunrise_abs(7200))}</Value></KeyValueObject>
+              <KeyValueObject Key="$CHECK4"><Value>02_OG_Workday_Heizung_Day</Value></KeyValueObject>
+              <KeyValueObject Key="$CHECK5"><Value>{sunset_abs()}</Value></KeyValueObject>
+              <KeyValueObject Key="$CHECK6"><Value>02_OG_Workday_Heizung_Night</Value></KeyValueObject>
+              <KeyValueObject Key="$CHECK7"><Value>{ReadingsVal("02_OG_Workday_Start", "state", sunrise_abs())}</Value></KeyValueObject>
+              <KeyValueObject Key="$CHECK8"><Value>{ReadingsVal("02_OG_Weekend_Start", "state", sunrise_abs(7200))}-{sunset_abs()}</Value></KeyValueObject>
+              <KeyValueObject Key="$CHECK9"><Value>{sunset_abs()}-{ReadingsVal("02_OG_Workday_Start", "state", sunrise_abs())}</Value></KeyValueObject>
+            </Values>
+          </Definition>
+          <ObjectTemplates>
+            <FHEMObject Type="LogFile">
+
+            </FHEMObject>
+          </ObjectTemplates>
+        </FHEMObject>
+      </ObjectTemplates>
+    </Template>
+  </Templates>
+</FHEMTemplateManager>

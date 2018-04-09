@@ -1,0 +1,27 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="My" GeneratedClassName="MySettings" UseMySettingsClassName="true">
+  <Profiles />
+  <Settings>
+    <Setting Name="DefaultFileName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">fhem.cfg</Value>
+    </Setting>
+    <Setting Name="DefaultPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">\\fhem\fhem</Value>
+    </Setting>
+    <Setting Name="DefaultSavePath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">\\fhem\fhem</Value>
+    </Setting>
+    <Setting Name="DefaultLogPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">\\fhem\fhem\log</Value>
+    </Setting>
+    <Setting Name="DefaultLogBackupPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">\\nas02\backup$\fhem1\log</Value>
+    </Setting>
+    <Setting Name="DefaultLogJoinPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">\\fhem\fhem\log\join</Value>
+    </Setting>
+    <Setting Name="DefaultIncludeSaveDirectoryName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">usrcfg</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

@@ -1,0 +1,489 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<FHEMTemplateManager>
+  <Templates>
+    <Template ID="1001" Name="Heizung">
+      <Filters>
+        <Filter Name="EnOcean_MD15_Filter">
+          <Type>EnOcean</Type>
+          <Attributes>
+            <KeyValueObject Key="eep">
+              <StringObject>
+                <Value>A5-20-01</Value>
+              </StringObject>
+            </KeyValueObject>
+          </Attributes>
+        </Filter>
+      </Filters>
+      <ObjectTemplates>
+        <FHEMObject FHEMType="DOIF">
+          <Filters>
+            <Filter>EnOcean_MD15_Filter</Filter>
+          </Filters>
+          <Name>
+            <FormatString>{0}_{1}_Timer_{2}</FormatString>
+            <Values>
+              <KeyValueObject Key="{0}">
+                <ReferenceObject>
+                  <ObjectSpecifier>TemplateFHEMObj</ObjectSpecifier>
+                  <KeyValueObject Key="Attributes">
+                    <KeyValueObject Key="room">
+                      <StringObject>
+                        <Value>1</Value>
+                      </StringObject>
+                    </KeyValueObject>
+                  </KeyValueObject>
+                </ReferenceObject>
+              </KeyValueObject>
+              <KeyValueObject Key="{1}">
+                <ReferenceObject>
+                  <ObjectSpecifier>Template</ObjectSpecifier>
+                  <StringObject>
+                    <Value>Name</Value>
+                  </StringObject>
+                </ReferenceObject>
+              </KeyValueObject>
+              <KeyValueObject Key="{2}">
+                <ReferenceObject>
+                  <ObjectSpecifier>CurrentObjectTemplate</ObjectSpecifier>
+                  <StringObject>
+                    <Value>FHEMType</Value>
+                  </StringObject>
+                </ReferenceObject>
+              </KeyValueObject>
+            </Values>
+          </Name>
+          <Definition>
+            <FormatString>
+              ((([$CHECK0] eq "on") or ([$CHECK1] eq "on") or ([$CHECK2] eq "on")) and ([$CHECK3])) (trigger $TRIGGER desired [$CHECK4]) \
+              DOELSEIF ((([$CHECK0] eq "on") or ([$CHECK1] eq "on") or ([$CHECK2] eq "on")) and ([$CHECK5])) (trigger $TRIGGER desired [$CHECK6]) \
+              DOELSEIF (([$CHECK0] eq "off") and ([$CHECK1] eq "off") and ([$CHECK2] eq "off") and ([$CHECK7])) (trigger $TRIGGER desired [$CHECK4]) \
+              DOELSEIF (([$CHECK0] eq "off") and ([$CHECK1] eq "off") and ([$CHECK2] eq "off") and ([$CHECK5])) (trigger $TRIGGER desired [$CHECK6]) \
+              DOELSEIF ((([$CHECK0] eq "on") or ([$CHECK1] eq "on") or ([$CHECK2] eq "on")) and ([$CHECK3-$CHECK5]) and ([$CHECK4])) (trigger $TRIGGER desired [$CHECK4]) \
+              DOELSEIF (([$CHECK0] eq "off") and ([$CHECK1] eq "off") and ([$CHECK2] eq "off") and ([$CHECK5-$CHECK7]) and ([$CHECK6])) (trigger $TRIGGER desired [$CHECK6])
+            </FormatString>
+            <Values>
+              <KeyValueObject Key="$TRIGGER">
+                <StringFormatObject>
+                  <FormatString>{0}_{1}_Notify</FormatString>
+                  <Values>
+                    <KeyValueObject Key="{0}">
+                      <ReferenceObject>
+                        <ObjectSpecifier>TemplateFHEMObj</ObjectSpecifier>
+                        <KeyValueObject Key="Attributes">
+                          <KeyValueObject Key="room">
+                            <StringObject>
+                              <Value>1</Value>
+                            </StringObject>
+                          </KeyValueObject>
+                        </KeyValueObject>
+                      </ReferenceObject>
+                    </KeyValueObject>
+                    <KeyValueObject Key="{1}">
+                      <ReferenceObject>
+                        <ObjectSpecifier>Template</ObjectSpecifier>
+                        <StringObject>
+                          <Value>Name</Value>
+                        </StringObject>
+                      </ReferenceObject>
+                    </KeyValueObject>
+                  </Values>
+                </StringFormatObject>
+              </KeyValueObject>
+              <KeyValueObject Key="$CHECK0">
+                <StringObject>
+                  <Value>isWeekend</Value>
+                </StringObject>
+              </KeyValueObject>
+              <KeyValueObject Key="$CHECK1">
+                <StringObject>
+                  <Value>isFeiertag</Value>
+                </StringObject>
+              </KeyValueObject>
+              <KeyValueObject Key="$CHECK2">
+                <StringObject>
+                  <Value>isHoliday</Value>
+                </StringObject>
+              </KeyValueObject>
+              <KeyValueObject Key="$CHECK3">
+                <StringFormatObject>
+                  <FormatString>{ReadingsVal("{0}_Weekend_Start", "state", sunrise_abs(7200))}</FormatString>
+                  <Values>
+                    <KeyValueObject Key="{0}">
+                      <ReferenceObject>
+                        <ObjectSpecifier>TemplateFHEMObj</ObjectSpecifier>
+                        <KeyValueObject Key="Attributes">
+                          <KeyValueObject Key="room">
+                            <StringObject>
+                              <Value>0</Value>
+                            </StringObject>
+                          </KeyValueObject>
+                        </KeyValueObject>
+                      </ReferenceObject>
+                    </KeyValueObject>
+                  </Values>
+                </StringFormatObject>
+              </KeyValueObject>
+              <KeyValueObject Key="$CHECK4">
+                <StringFormatObject>
+                  <FormatString>{0}_Workday_Heizung_Day</FormatString>
+                  <Values>
+                    <KeyValueObject Key="{0}">
+                      <ReferenceObject>
+                        <ObjectSpecifier>TemplateFHEMObj</ObjectSpecifier>
+                        <KeyValueObject Key="Attributes">
+                          <KeyValueObject Key="room">
+                            <StringObject>
+                              <Value>0</Value>
+                            </StringObject>
+                          </KeyValueObject>
+                        </KeyValueObject>
+                      </ReferenceObject>
+                    </KeyValueObject>
+                  </Values>
+                </StringFormatObject>
+              </KeyValueObject>
+              <KeyValueObject Key="$CHECK5">
+                <StringObject>
+                  <Value>{sunset_abs()}</Value>
+                </StringObject>
+              </KeyValueObject>
+              <KeyValueObject Key="$CHECK6">
+                <StringFormatObject>
+                  <FormatString>{0}_Workday_Heizung_Night</FormatString>
+                  <Values>
+                    <KeyValueObject Key="{0}">
+                      <ReferenceObject>
+                        <ObjectSpecifier>TemplateFHEMObj</ObjectSpecifier>
+                        <KeyValueObject Key="Attributes">
+                          <KeyValueObject Key="room">
+                            <StringObject>
+                              <Value>0</Value>
+                            </StringObject>
+                          </KeyValueObject>
+                        </KeyValueObject>
+                      </ReferenceObject>
+                    </KeyValueObject>
+                  </Values>
+                </StringFormatObject>
+              </KeyValueObject>
+              <KeyValueObject Key="$CHECK7">
+                <StringFormatObject>
+                  <FormatString>{ReadingsVal("{0}_Workday_Start", "state", sunrise_abs())}</FormatString>
+                  <Values>
+                    <KeyValueObject Key="{0}">
+                      <ReferenceObject>
+                        <ObjectSpecifier>TemplateFHEMObj</ObjectSpecifier>
+                        <KeyValueObject Key="Attributes">
+                          <KeyValueObject Key="room">
+                            <StringObject>
+                              <Value>0</Value>
+                            </StringObject>
+                          </KeyValueObject>
+                        </KeyValueObject>
+                      </ReferenceObject>
+                    </KeyValueObject>
+                  </Values>
+                </StringFormatObject>
+              </KeyValueObject>
+              <KeyValueObject Key="$CHECK8">
+                <StringFormatObject>
+                  <FormatString>{ReadingsVal("{0}_Weekend_Start", "state", sunrise_abs(7200))}-{sunset_abs()}</FormatString>
+                  <Values>
+                    <KeyValueObject Key="{0}">
+                      <ReferenceObject>
+                        <ObjectSpecifier>TemplateFHEMObj</ObjectSpecifier>
+                        <KeyValueObject Key="Attributes">
+                          <KeyValueObject Key="room">
+                            <StringObject>
+                              <Value>0</Value>
+                            </StringObject>
+                          </KeyValueObject>
+                        </KeyValueObject>
+                      </ReferenceObject>
+                    </KeyValueObject>
+                  </Values>
+                </StringFormatObject>
+              </KeyValueObject>
+              <KeyValueObject Key="$CHECK9">
+                <StringFormatObject>
+                  <FormatString>{sunset_abs()}-{ReadingsVal("{0}_Workday_Start", "state", sunrise_abs())}</FormatString>
+                  <Values>
+                    <KeyValueObject Key="{0}">
+                      <ReferenceObject>
+                        <ObjectSpecifier>TemplateFHEMObj</ObjectSpecifier>
+                        <KeyValueObject Key="Attributes">
+                          <KeyValueObject Key="room">
+                            <StringObject>
+                              <Value>0</Value>
+                            </StringObject>
+                          </KeyValueObject>
+                        </KeyValueObject>
+                      </ReferenceObject>
+                    </KeyValueObject>
+                  </Values>
+                </StringFormatObject>
+              </KeyValueObject>
+            </Values>
+          </Definition>
+          <Attributes>
+            <KeyValueObject Key="alias">
+              <StringFormatObject>
+                <FormatString>{0} {1} Timer</FormatString>
+                <Values>
+                  <KeyValueObject Key="{0}">
+                    <ReferenceObject>
+                      <ObjectSpecifier>TemplateFHEMObj</ObjectSpecifier>
+                      <KeyValueObject Key="Attributes">
+                        <KeyValueObject Key="room">
+                          <StringObject>
+                            <Value>1</Value>
+                          </StringObject>
+                        </KeyValueObject>
+                      </KeyValueObject>
+                    </ReferenceObject>
+                  </KeyValueObject>
+                  <KeyValueObject Key="{1}">
+                    <ReferenceObject>
+                      <ObjectSpecifier>Template</ObjectSpecifier>
+                      <StringObject>
+                        <Value>Name</Value>
+                      </StringObject>
+                    </ReferenceObject>
+                  </KeyValueObject>
+                </Values>
+              </StringFormatObject>
+            </KeyValueObject>
+            <KeyValueObject Key="do">
+              <StringObject>
+                <Value>always</Value>
+              </StringObject>
+            </KeyValueObject>
+            <KeyValueObject Key="wait">
+              <StringObject>
+                <Value>5</Value>
+              </StringObject>
+            </KeyValueObject>
+            <KeyValueObject Key="group">
+              <StringObject>
+                <Value>27_DoIf</Value>
+              </StringObject>
+            </KeyValueObject>
+            <KeyValueObject Key="room">
+              <StringFormatObject>
+                <FormatString>{0},{1}</FormatString>
+                <Values>
+                  <KeyValueObject Key="{0}">
+                    <ReferenceObject>
+                      <ObjectSpecifier>TemplateFHEMObj</ObjectSpecifier>
+                      <KeyValueObject Key="Attributes">
+                        <KeyValueObject Key="room">
+                          <StringObject>
+                            <Value>0</Value>
+                          </StringObject>
+                        </KeyValueObject>
+                      </KeyValueObject>
+                    </ReferenceObject>
+                  </KeyValueObject>
+                  <KeyValueObject Key="{1}">
+                    <ReferenceObject>
+                      <ObjectSpecifier>TemplateFHEMObj</ObjectSpecifier>
+                      <KeyValueObject Key="Attributes">
+                        <KeyValueObject Key="room">
+                          <StringObject>
+                            <Value>1</Value>
+                          </StringObject>
+                        </KeyValueObject>
+                      </KeyValueObject>
+                    </ReferenceObject>
+                  </KeyValueObject>
+                </Values>
+              </StringFormatObject>
+            </KeyValueObject>
+            <KeyValueObject Key="disable">
+              <StringObject>
+                <Value>0</Value>
+              </StringObject>
+            </KeyValueObject>
+            <KeyValueObject Key="verbose">
+              <StringObject>
+                <Value>3</Value>
+              </StringObject>
+            </KeyValueObject>
+          </Attributes>
+          <ObjectTemplates>
+            <FHEMObject FHEMType="FileLog">
+              <Name>
+                <FormatString>FileLog_{0}</FormatString>
+                <Values>
+                  <KeyValueObject Key="{0}">
+                    <ReferenceObject>
+                      <ObjectSpecifier>ParentFHEMObj</ObjectSpecifier>
+                      <StringObject>
+                        <Value>Name</Value>
+                      </StringObject>
+                    </ReferenceObject>
+                  </KeyValueObject>
+                </Values>
+              </Name>
+              <Definition>
+                <FormatString>./log/{0}.log {0}</FormatString>
+                <Values>
+                  <KeyValueObject Key="{0}">
+                    <ReferenceObject>
+                      <ObjectSpecifier>ParentFHEMObj</ObjectSpecifier>
+                      <StringObject>
+                        <Value>Name</Value>
+                      </StringObject>
+                    </ReferenceObject>
+                  </KeyValueObject>
+                </Values>
+              </Definition>
+              <Attributes>
+                <KeyValueObject Key="logtype">
+                  <StringObject>
+                    <Value>text</Value>
+                  </StringObject>
+                </KeyValueObject>
+                <KeyValueObject Key="group">
+                  <StringObject>
+                    <Value>98_FileLog</Value>
+                  </StringObject>
+                </KeyValueObject>
+                <KeyValueObject Key="room">
+                  <StringObject>
+                    <Value>FileLog</Value>
+                  </StringObject>
+                </KeyValueObject>
+                <KeyValueObject Key="disable">
+                  <StringObject>
+                    <Value>0</Value>
+                  </StringObject>
+                </KeyValueObject>
+              </Attributes>
+            </FHEMObject>
+          </ObjectTemplates>
+        </FHEMObject>
+      </ObjectTemplates>
+    </Template>
+    <Template ID="9001" Name="FileLog">
+      <Filters>
+        <Filter Name="DoIF">
+          <Type>DOIF</Type>
+          <Attributes>
+            <KeyValueObject Key="disable">
+              <StringObject>
+                <Value>0</Value>
+              </StringObject>
+            </KeyValueObject>
+          </Attributes>
+        </Filter>
+        <Filter Name="Notify">
+          <Type>notify</Type>
+          <Attributes>
+            <KeyValueObject Key="disable">
+              <StringObject>
+                <Value>0</Value>
+              </StringObject>
+            </KeyValueObject>
+          </Attributes>
+        </Filter>
+        <Filter Name="EnOcean">
+          <Type>EnOcean</Type>
+          <Attributes>
+            <KeyValueObject Key="disable">
+              <StringObject>
+                <Value>0</Value>
+              </StringObject>
+            </KeyValueObject>
+          </Attributes>
+        </Filter>
+        <Filter Name="DUOFERN">
+          <Type>DUOFERN</Type>
+          <Attributes>
+            <KeyValueObject Key="disable">
+              <StringObject>
+                <Value>0</Value>
+              </StringObject>
+            </KeyValueObject>
+          </Attributes>
+        </Filter>
+        <Filter Name="CUL_HM">
+          <Type>CUL_HM</Type>
+          <Attributes>
+            <KeyValueObject Key="disable">
+              <StringObject>
+                <Value>0</Value>
+              </StringObject>
+            </KeyValueObject>
+          </Attributes>
+        </Filter>
+        <Filter Name="FS20">
+          <Type>FS20</Type>
+          <Attributes>
+            <KeyValueObject Key="disable">
+              <StringObject>
+                <Value>0</Value>
+              </StringObject>
+            </KeyValueObject>
+          </Attributes>
+        </Filter>
+      </Filters>
+      <ObjectTemplates>
+        <FHEMObject FHEMType="FileLog">
+          <Filters>
+            <Filter>DoIF</Filter>
+            <Filter>Notify</Filter>
+          </Filters>
+          <Name>
+            <FormatString>FileLog_{0}</FormatString>
+            <Values>
+              <KeyValueObject Key="{0}">
+                <ReferenceObject>
+                  <ObjectSpecifier>TemplateFHEMObj</ObjectSpecifier>
+                  <StringObject>
+                    <Value>Name</Value>
+                  </StringObject>
+                </ReferenceObject>
+              </KeyValueObject>
+            </Values>
+          </Name>
+          <Definition>
+            <FormatString>./log/{0}.log {0}</FormatString>
+            <Values>
+              <KeyValueObject Key="{0}">
+                <ReferenceObject>
+                  <ObjectSpecifier>TemplateFHEMObj</ObjectSpecifier>
+                  <StringObject>
+                    <Value>Name</Value>
+                  </StringObject>
+                </ReferenceObject>
+              </KeyValueObject>
+            </Values>
+          </Definition>
+          <Attributes>
+            <KeyValueObject Key="logtype">
+              <StringObject>
+                <Value>text</Value>
+              </StringObject>
+            </KeyValueObject>
+            <KeyValueObject Key="group">
+              <StringObject>
+                <Value>98_FileLog</Value>
+              </StringObject>
+            </KeyValueObject>
+            <KeyValueObject Key="room">
+              <StringObject>
+                <Value>FileLog</Value>
+              </StringObject>
+            </KeyValueObject>
+            <KeyValueObject Key="disable">
+              <StringObject>
+                <Value>0</Value>
+              </StringObject>
+            </KeyValueObject>
+          </Attributes>
+        </FHEMObject>
+      </ObjectTemplates>
+    </Template>
+  </Templates>
+</FHEMTemplateManager>
